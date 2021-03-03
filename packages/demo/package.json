@@ -1,0 +1,11 @@
+{
+  "name": "@morten-olsen/rolighed-demo",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/morten-olsen/rolighed"
+  }
+}
