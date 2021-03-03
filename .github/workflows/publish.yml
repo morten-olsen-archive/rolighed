@@ -41,6 +41,9 @@ jobs:
       - name: Install Packages
         run: yarn install
 
+      - name: Build Packages
+        run: yarn tsc --build
+
       - name: Publish package
         run: "yarn lerna publish prerelease --yes --message 'chore: release new versions %s' --force-publish"
         env:
