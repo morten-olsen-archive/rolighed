@@ -1,6 +1,6 @@
 {
   "name": "@morten-olsen/rolighed-cli",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha.2",
   "main": "dist/index.js",
   "bin": {
     "rolighed-server": "./bin/server.js"
@@ -12,7 +12,7 @@
     "url": "https://github.com/morten-olsen/rolighed"
   },
   "dependencies": {
-    "@morten-olsen/rolighed-server": "1.0.0",
+    "@morten-olsen/rolighed-server": "^1.0.0-alpha.2",
     "convict": "^6.0.0"
   },
   "devDependencies": {
