@@ -1,8 +1,11 @@
 import { combineReducers } from 'redux';
-import groups from './groups';
+import { GroupsReducer } from '@morten-olsen/rolighed-common';
+import createGroups from './groups';
 
-const reducer = combineReducers({
-  groups,
+const defaultGroupsReducer: GroupsReducer = (a = undefined as any) => a;
+
+const createReducer = (groupsReducer = defaultGroupsReducer) => combineReducers({
+  groups: createGroups(groupsReducer),
 });
 
-export default reducer;
+export default createReducer;

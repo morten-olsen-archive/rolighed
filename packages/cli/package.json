@@ -12,10 +12,6 @@
     "url": "https://github.com/morten-olsen/rolighed"
   },
   "dependencies": {
-    "@morten-olsen/rolighed-server": "^1.0.0-alpha.3",
-    "convict": "^6.0.0"
-  },
-  "devDependencies": {
-    "@types/convict": "^5.2.2"
+    "@morten-olsen/rolighed-server": "^1.0.0-alpha.3"
   }
 }

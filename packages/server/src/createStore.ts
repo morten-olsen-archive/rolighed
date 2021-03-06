@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware } from 'redux';
-import { State } from '@morten-olsen/rolighed-common';
+import { State, GroupsReducer } from '@morten-olsen/rolighed-common';
 import reducer from './reducers';
 import createMqtt from './middleware/mqtt';
 import createScripts from './middleware/scripts';
@@ -9,6 +9,7 @@ import Script from './types/Script';
 interface Options {
   scripts: ReturnType<Script>[];
   broker: string;
+  reducer?: GroupsReducer,
 }
 
 const create = (options: Options) => {
@@ -23,7 +24,7 @@ const create = (options: Options) => {
   const io = createIO({});
 
   const store = createStore<State, any, any, any>(
-    reducer,
+    reducer(options.reducer),
     applyMiddleware(
       mqtt,
       scripts,

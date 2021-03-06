@@ -1,6 +1,7 @@
 import Script from './types/Script';
 import createScriptActions from './actions/scripts';
 import GroupsState from './types/GroupState';
+import GroupsReducer from './types/GroupReducer';
 
 type ScriptActions = ReturnType<typeof createScriptActions>
 
@@ -12,6 +13,7 @@ export {
   Script,
   ScriptActions,
   GroupsState,
+  GroupsReducer,
   createScriptActions,
   State,
 };

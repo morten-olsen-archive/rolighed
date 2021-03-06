@@ -1,5 +1,5 @@
 import { Reducer } from 'redux';
-import { GroupsState } from '@morten-olsen/rolighed-common';
+import { GroupsState, GroupsReducer } from '@morten-olsen/rolighed-common';
 
 const createDefaultState = (): GroupsState => ({
   devices: {},
@@ -44,43 +44,48 @@ const createAccessoryStates = (state: GroupsState) => {
   return accessoryStates;
 };
 
-const groups: Reducer<GroupsState>  = (state = createDefaultState(), action) => {
+const groups = (reducer: GroupsReducer): Reducer<GroupsState> => (state = createDefaultState(), action) => {
+  let result = state;
   switch (action.type) {
     case '@@MQTT/msg/groups/settings': {
       const newState = {
         ...state,
         settings: action.payload,
       };
-      return {
+      result = {
         ...newState,
         deviceStates: createDeviceStates(newState),
         accessoryStates: createAccessoryStates(newState),
       };
+      break;
     }
     case '@@MQTT/msg/groups/devices': {
       const newState = {
         ...state,
         devices: action.payload,
       };
-      return {
+      result = {
         ...newState,
         deviceStates: createDeviceStates(newState),
       };
+      break;
     }
     case '@@MQTT/msg/groups/accessories': {
       const newState = {
         ...state,
         accessories: action.payload,
       };
-      return {
+      result = {
         ...state,
         accessoryStates: createAccessoryStates(newState),
       };
+      break;
     }
     default: {
       return state;
     }
   };
+  return reducer(result, action);
 };
 
 export default groups;

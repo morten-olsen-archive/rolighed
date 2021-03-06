@@ -1,19 +1,22 @@
 import createStore, {} from '@morten-olsen/rolighed-server/dist/src/index';
-import convict from 'convict';
+import path from 'path';
+import fs from 'fs';
 
-const config = convict({
-  brokerUrl: {
-    doc: 'Url for MQTT broker',
-    env: 'BROKER_URL',
+const config = {
+  broker: {
+    url: process.env.BROKER_URL || 'mqtt://localhost',
   },
-  configLocation: {
-    doc: 'Configuration file path',
-    env: 'CONFIG_PATH',
-  },
-});
+  configFilePath: path.resolve(process.env.CONFIG_FILE || './config.js'),
+};
+
+if (!fs.existsSync(config.configFilePath)) {
+  throw new Error('config file not found');
+}
+
+const configFile = JSON.parse(fs.readFileSync(config.configFilePath, 'utf-8'));
 
 createStore({
-  broker: config.get('brokerUrl'),
-  scripts: [],
+  broker: config.broker.url,
+  scripts: configFile.scripts || [],
 });
 
