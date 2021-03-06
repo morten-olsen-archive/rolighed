@@ -44,6 +44,8 @@ const createAccessoryStates = (state: GroupsState) => {
   return accessoryStates;
 };
 
+console.log('foo bar');
+
 const groups = (reducer: GroupsReducer): Reducer<GroupsState> => (state = createDefaultState(), action) => {
   let result = state;
   switch (action.type) {
@@ -71,12 +73,13 @@ const groups = (reducer: GroupsReducer): Reducer<GroupsState> => (state = create
       break;
     }
     case '@@MQTT/msg/groups/accessories': {
+      console.log('accessories!', action.payload);
       const newState = {
         ...state,
         accessories: action.payload,
       };
       result = {
-        ...state,
+        ...newState,
         accessoryStates: createAccessoryStates(newState),
       };
       break;
