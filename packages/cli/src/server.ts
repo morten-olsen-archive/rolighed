@@ -6,14 +6,14 @@ const config = {
   broker: {
     url: process.env.BROKER_URL || 'mqtt://localhost',
   },
-  configFilePath: path.resolve(process.env.CONFIG_FILE || './config.js'),
+  configFilePath: path.resolve(process.env.CONFIG_FILE || './config'),
 };
 
 if (!fs.existsSync(config.configFilePath)) {
   throw new Error('config file not found');
 }
 
-const configFile = JSON.parse(fs.readFileSync(config.configFilePath, 'utf-8'));
+const configFile = require(config.configFilePath);
 
 createStore({
   broker: config.broker.url,
