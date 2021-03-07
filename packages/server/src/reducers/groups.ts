@@ -44,33 +44,28 @@ const createAccessoryStates = (state: GroupsState) => {
   return accessoryStates;
 };
 
-console.log('foo bar');
-
-const groups = (reducer: GroupsReducer): Reducer<GroupsState> => (state = createDefaultState(), action) => {
-  let result = state;
+const groups = (): Reducer<GroupsState> => (state = createDefaultState(), action) => {
   switch (action.type) {
     case '@@MQTT/msg/groups/settings': {
       const newState = {
         ...state,
         settings: action.payload,
       };
-      result = {
+      return {
         ...newState,
         deviceStates: createDeviceStates(newState),
         accessoryStates: createAccessoryStates(newState),
       };
-      break;
     }
     case '@@MQTT/msg/groups/devices': {
       const newState = {
         ...state,
         devices: action.payload,
       };
-      result = {
+      return {
         ...newState,
         deviceStates: createDeviceStates(newState),
       };
-      break;
     }
     case '@@MQTT/msg/groups/accessories': {
       console.log('accessories!', action.payload);
@@ -78,17 +73,15 @@ const groups = (reducer: GroupsReducer): Reducer<GroupsState> => (state = create
         ...state,
         accessories: action.payload,
       };
-      result = {
+      return {
         ...newState,
         accessoryStates: createAccessoryStates(newState),
       };
-      break;
     }
     default: {
       return state;
     }
   };
-  return reducer(result, action);
 };
 
 export default groups;

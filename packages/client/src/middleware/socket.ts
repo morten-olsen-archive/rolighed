@@ -7,8 +7,9 @@ interface Options {
 }
 
 const socketMiddleware = (options: Options): Middleware => (store) => (next) => {
+  let socket: WebSocket | undefined;
   const setup = () => {
-    const socket = new WebSocket(options.url);
+    socket = new WebSocket(options.url);
 
     socket.onopen = () => {
       console.log('Connected');
@@ -21,19 +22,20 @@ const socketMiddleware = (options: Options): Middleware => (store) => (next) => 
       next({
         type: '@@SOCKET/disconnected',
       });
+      socket = undefined;
       setTimeout(setup, options.retryTime ?? 1000);
     };
 
     socket.onmessage = ({ data }) => {
       const { type, payload } = JSON.parse(data as string);
       switch (type) {
-        case 'update': {
+        case 'state/partial': {
           return next({
             type: '@@SOCKET/update',
             payload,
           });
         }
-        case 'setup': {
+        case 'core/setup': {
           return next({
             type: '@@SOCKET/setup',
             payload,
@@ -53,6 +55,16 @@ const socketMiddleware = (options: Options): Middleware => (store) => (next) => 
   setup();
 
   return (action) => {
+    if (action.type === '@@SOCKET/remote') {
+      if (!socket) {
+        throw new Error('Socket not connected');
+      }
+      socket.send(JSON.stringify({
+        type: 'dispatch',
+        payload: action.payload,
+      }));
+      return;
+    }
     return next(action);
   };
 };

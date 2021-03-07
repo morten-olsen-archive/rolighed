@@ -42,7 +42,7 @@ const groupsReducer: Reducer<State> = (state = createDefaults(), action) => {
     case '@@SOCKET/update': {
       return {
         ...state,
-        remote: jsondiffpatch.patch(state.remote, action.payload.delta),
+        remote: jsondiffpatch.patch(state.remote, action.payload.diff),
       };
     }
     default: {
