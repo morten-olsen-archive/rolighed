@@ -1,4 +1,4 @@
-import Script from '../types/Script';
+import { Script } from '@morten-olsen/rolighed-common';
 
 interface Options {
   device: string;
@@ -6,7 +6,7 @@ interface Options {
   timeout?: number;
 }
 
-const setup: Script<Options> = (options) => ({ actions }) => {
+const setup = (options: Options): Script => ({ actions }) => {
   let timer: any = undefined;
 
   const reset = () => {

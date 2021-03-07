@@ -1,6 +1,5 @@
 import createStore, {} from '@morten-olsen/rolighed-server/dist/src/index';
 import path from 'path';
-import fs from 'fs';
 
 const config = {
   broker: {

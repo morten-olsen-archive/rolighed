@@ -68,7 +68,6 @@ const groups = (): Reducer<GroupsState> => (state = createDefaultState(), action
       };
     }
     case '@@MQTT/msg/groups/accessories': {
-      console.log('accessories!', action.payload);
       const newState = {
         ...state,
         accessories: action.payload,

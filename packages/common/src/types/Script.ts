@@ -7,7 +7,7 @@ interface ScriptArgs {
   actions: ReturnType<typeof createActions>;
 }
 
-type Script<Options = any> = (options: Options) => (args: ScriptArgs) => (action: any) => Promise<void>;
+type Script = (args: ScriptArgs) => (action: any) => Promise<void>;
 
 export {
   ScriptArgs,

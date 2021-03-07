@@ -1,8 +1,8 @@
 import { Middleware } from 'redux';
-import Script from '../types/Script';
+import { Script } from '@morten-olsen/rolighed-common';
 import createActions from '../actions/scripts';
 
-const createScripts = (scripts: ReturnType<Script>[]): Middleware => (store) => (next) => {
+const createScripts = (scripts: Script[]): Middleware => (store) => (next) => {
   const actions = createActions(store);
   const scriptList = scripts.map((script) => script({
     dispatch: store.dispatch,

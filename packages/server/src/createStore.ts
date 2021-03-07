@@ -1,13 +1,12 @@
 import { createStore, applyMiddleware } from 'redux';
-import { GroupsState } from '@morten-olsen/rolighed-common';
+import { Script, GroupsState } from '@morten-olsen/rolighed-common';
 import reducer from './reducers';
 import createMqtt from './middleware/mqtt';
 import createScripts from './middleware/scripts';
 import createSocket from './middleware/socket';
-import Script from './types/Script';
 
 interface Options {
-  scripts: ReturnType<Script>[];
+  scripts: Script[];
   broker: string;
 }
 
