@@ -9,10 +9,6 @@ const config = {
   configFilePath: path.resolve(process.env.CONFIG_FILE || './config'),
 };
 
-if (!fs.existsSync(config.configFilePath)) {
-  throw new Error('config file not found');
-}
-
 const configFile = require(config.configFilePath);
 
 createStore({
