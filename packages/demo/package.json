@@ -1,6 +1,6 @@
 {
   "name": "@morten-olsen/rolighed-demo",
-  "version": "1.0.0-alpha.8",
+  "version": "1.0.0-alpha.9",
   "main": "dist/index.js",
   "private": true,
   "license": "MIT",
