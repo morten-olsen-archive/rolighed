@@ -10,29 +10,10 @@ const createScripts = (scripts: Script[]): Middleware => (store) => (next) => {
     actions,
   }));
   return async (action: any) => {
-    const hrstart = process.hrtime()
-    const scriptStats = await Promise.all(scriptList.map(async (script) => {
-      const scriptstart = process.hrtime()
-      await script(action);
-      const scriptend = process.hrtime(scriptstart);
-      return {
-        s: scriptend[0],
-        ms: scriptend[1] / 1000000,
-      };
-    }));
-    const hrend = process.hrtime(hrstart)
+    const result = await Promise.resolve(next(action));
+    await Promise.all(scriptList.map((script) => script(action)));
 
-    return next({
-      ...action,
-      stats: {
-        ...(action.stats || {}),
-        scriptTime: {
-          s: hrend[0],
-          ms: hrend[1] / 1000000,
-        },
-        scripts: scriptStats,
-      },
-    });
+    return result;
   };
 };
 
