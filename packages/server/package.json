@@ -1,6 +1,6 @@
 {
   "name": "@morten-olsen/rolighed-server",
-  "version": "1.0.0-alpha.13",
+  "version": "1.0.0-alpha.14",
   "main": "dist/src/index.js",
   "license": "MIT",
   "repository": {
@@ -8,7 +8,7 @@
     "url": "https://github.com/morten-olsen/rolighed"
   },
   "dependencies": {
-    "@morten-olsen/rolighed-common": "^1.0.0-alpha.13",
+    "@morten-olsen/rolighed-common": "^1.0.0-alpha.14",
     "jsondiffpatch": "^0.4.1",
     "redux": "^4.0.5",
     "ws": "^7.4.4"
