@@ -1,6 +1,6 @@
 {
   "name": "@morten-olsen/rolighed-common",
-  "version": "1.0.0-alpha.15",
+  "version": "1.0.0-alpha.16",
   "main": "dist/src/index.js",
   "license": "MIT",
   "repository": {
