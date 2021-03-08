@@ -14,7 +14,7 @@ class PlatformZigbee2MQTT extends Platform {
 
   private _onMessage = (topic: string, message: string) => {
     const data = JSON.parse(message);
-    if (topic === `${this._topic}/bridge/devices`) {
+    if (topic === `${this._topic}/bridge/config/devices`) {
       const topics = Object.values(data).map((device: any) => `${this._topic}/${device.friendlyName}`);
       this._client.subscribe(topics);
     } else {
