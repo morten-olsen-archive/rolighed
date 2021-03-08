@@ -8,7 +8,7 @@ class PlatformZigbee2MQTT extends Platform {
   constructor(api: PlatformApi) {
     super(api);
     this._client = Mqtt.connect('mqtt://localhost');
-    this._client.subscribe('zigbee2mqtt/bridge/devices');
+    this._client.subscribe(`${this._topic}/bridge/config/devices`);
     this._client.on('message', this._onMessage);
   }
 
