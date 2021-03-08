@@ -67,6 +67,7 @@ const groups = (): Reducer<GroupsState> => (state = createDefaultState(), action
           [action.meta.name]: {
             ...state.devices[action.meta.name],
             ...action.payload,
+            controller: action.meta.controller,
           },
         },
       };
