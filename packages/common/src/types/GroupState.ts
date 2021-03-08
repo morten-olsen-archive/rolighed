@@ -1,14 +1,20 @@
 interface GroupsState {
   devices: {
-    [deviceName: string]: string[];
-  };
-  settings: {
-    [groupName: string]: {
-      [key: string]: any;
-    };
+    [deviceName: string]: {
+      controller: string;
+      config: any;
+    }
   };
   deviceStates: {
     [deviceName: string]: {
+      [key: string]: any;
+    };
+  };
+  deviceGroups: {
+    [deviceName: string]: string[];
+  };
+  groupSettings: {
+    [groupName: string]: {
       [key: string]: any;
     };
   };
@@ -21,6 +27,9 @@ interface GroupsState {
     };
   };
   accessoryStates: {
+    [name: string]: {
+      [key: string]: any;
+    };
   };
 }
 

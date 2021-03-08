@@ -1,13 +1,8 @@
-import { Script, GroupsState, GroupsReducer } from '@morten-olsen/rolighed-server';
-
-interface Configuration {
-  scripts: Script[];
-  reducer?: GroupsReducer,
-}
+import { Options, Script, GroupsState, GroupsReducer } from '@morten-olsen/rolighed-server';
 
 export {
   Script,
   GroupsState,
   GroupsReducer,
-  Configuration,
+  Options,
 };

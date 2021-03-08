@@ -1,12 +1,12 @@
+import { Middleware } from '@morten-olsen/rolighed-common';
 import WebSocket from 'ws';
-import { Middleware } from 'redux';
 import SocketClient from './SocketClient';
 
 interface Options {
   port?: number;
 }
 
-const socketMiddleware = (options: Options): Middleware => (store) => (next) => {
+const socketMiddleware: Middleware<Options> = async (options) => (store) => (next) => {
   let clients: SocketClient[] = [];
 
   const server = new WebSocket.Server({
@@ -27,9 +27,6 @@ const socketMiddleware = (options: Options): Middleware => (store) => (next) => 
 
   return async (action) => {
     const result = await next(action);
-    const nextState = JSON.parse(JSON.stringify(store.getState()));
-
-
     clients.forEach((client) => client.updateState(action));
     return result;
   };

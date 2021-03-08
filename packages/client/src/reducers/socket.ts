@@ -1,5 +1,5 @@
 import { Reducer } from 'redux';
-import { GroupsState } from '@morten-olsen/rolighed-common';
+import { createDefaultState, GroupsState } from '@morten-olsen/rolighed-common';
 import * as jsondiffpatch from 'jsondiffpatch';
 
 
@@ -10,13 +10,7 @@ interface State {
 
 const createDefaults = (): State => ({
   connected: false,
-  remote: {
-    devices: {},
-    settings: {},
-    accessories: {},
-    deviceStates: {},
-    accessoryStates: {},
-  },
+  remote: createDefaultState(),
 });
 
 const groupsReducer: Reducer<State> = (state = createDefaults(), action) => {

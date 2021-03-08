@@ -1,21 +1,22 @@
 import { Reducer } from 'redux';
-import { GroupsState, GroupsReducer } from '@morten-olsen/rolighed-common';
+import { GroupsState } from '@morten-olsen/rolighed-common';
 
 const createDefaultState = (): GroupsState => ({
   devices: {},
-  settings: {},
+  deviceGroups: {},
+  groupSettings: {},
   deviceStates: {},
   accessories: {},
   accessoryStates: {},
 });
 
 const createDeviceStates = (state: GroupsState) => {
-  const { devices, settings } = state;
+  const { deviceGroups, groupSettings } = state;
   
-  const deviceStates = Object.entries(devices).reduce((output, [device, groups]) => {
+  const deviceStates = Object.entries(deviceGroups).reduce((output, [device, groups]) => {
     const deviceState = groups.reduce((output, group) => ({
       ...output,
-      ...(settings[group] || {}),
+      ...(groupSettings[group] || {}),
     }), {});
     return {
       ...output,
@@ -27,12 +28,12 @@ const createDeviceStates = (state: GroupsState) => {
 };
 
 const createAccessoryStates = (state: GroupsState) => {
-  const { accessories, settings } = state;
+  const { accessories, groupSettings } = state;
 
   const accessoryStates = Object.entries(accessories).reduce((output, [name, { bind }]) => {
     const accessoryState = Object.entries(bind).reduce((output, [prop, group]) => ({
       ...output,
-      [prop]: (settings[group] || {})[prop],
+      [prop]: (groupSettings[group] || {})[prop],
     }), {});
 
     return {
@@ -46,10 +47,49 @@ const createAccessoryStates = (state: GroupsState) => {
 
 const groups = (): Reducer<GroupsState> => (state = createDefaultState(), action) => {
   switch (action.type) {
-    case '@@MQTT/msg/groups/settings': {
+    case '@@PLATFORM/addDevice': {
+      return {
+        ...state,
+        devices: {
+          ...state.devices,
+          [action.meta.name]: {
+            ...action.payload,
+            controller: action.meta.controller,
+          },
+        },
+      };
+    };
+    case '@@PLATFORM/setDevice': {
+      return {
+        ...state,
+        devices: {
+          ...state.devices,
+          [action.meta.name]: {
+            ...state.devices[action.meta.name],
+            ...action.payload,
+          },
+        },
+      };
+    };
+    case '@@PLATFORM/removeDevice': {
       const newState = {
         ...state,
-        settings: action.payload,
+        devices: {
+          ...state.devices,
+        },
+      };
+
+      delete newState.devices[action.payload];
+
+      return newState;
+    };
+    case '@@GROUPS/setGroupSettings': {
+      const newState = {
+        ...state,
+        groupSettings: {
+          ...state.groupSettings,
+          ...action.payload,
+        },
       };
       return {
         ...newState,
@@ -57,17 +97,20 @@ const groups = (): Reducer<GroupsState> => (state = createDefaultState(), action
         accessoryStates: createAccessoryStates(newState),
       };
     }
-    case '@@MQTT/msg/groups/devices': {
+    case '@@GROUPS/setDeviceGroups': {
       const newState = {
         ...state,
-        devices: action.payload,
+        deviceGroups: {
+          ...state.deviceGroups,
+          ...action.payload,
+        },
       };
       return {
         ...newState,
         deviceStates: createDeviceStates(newState),
       };
     }
-    case '@@MQTT/msg/groups/accessories': {
+    case '@@GROUPS/setAccessories': {
       const newState = {
         ...state,
         accessories: action.payload,

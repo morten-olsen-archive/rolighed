@@ -18,5 +18,7 @@
     "path": "packages/client"
   }, {
     "path": "packages/cli"
+  }, {
+    "path": "packages/platform-zigbee2mqtt"
   }]
 }

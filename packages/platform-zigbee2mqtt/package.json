@@ -1,0 +1,14 @@
+{
+  "name": "@morten-olsen/rolighed-platform-zigbee2mqtt",
+  "version": "1.0.0-alpha.10",
+  "main": "dist/src/index.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/morten-olsen/rolighed"
+  },
+  "dependencies": {
+    "@morten-olsen/rolighed-common": "1.0.0-alpha.10",
+    "mqtt": "^4.2.6"
+  }
+}

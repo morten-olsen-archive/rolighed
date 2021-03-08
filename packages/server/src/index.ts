@@ -1,4 +1,7 @@
 import createStore, { Options } from './createStore';
+import platforms from './middleware/platforms';
+import websocket from './middleware/socket';
+import scripts from './middleware/scripts';
 import {
   Script,
   GroupsState,
@@ -15,6 +18,9 @@ export {
   Options,
   createScriptActions,
   ScriptActions,
+  platforms,
+  websocket,
+  scripts,
 };
 
 export default createStore;

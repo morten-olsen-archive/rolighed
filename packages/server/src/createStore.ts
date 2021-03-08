@@ -1,32 +1,43 @@
-import { createStore, applyMiddleware } from 'redux';
-import { Script, GroupsState } from '@morten-olsen/rolighed-common';
+import { createStore, applyMiddleware, Store } from 'redux';
+import { Middleware, MiddlewareConfig, GroupsState } from '@morten-olsen/rolighed-common';
+import scripts from './middleware/scripts';
+import socket from './middleware/socket';
+import platforms from './middleware/platforms';
 import reducer from './reducers';
-import createMqtt from './middleware/mqtt';
-import createScripts from './middleware/scripts';
-import createSocket from './middleware/socket';
+
+const buildIn: {[name: string]: Middleware} = {
+  scripts,
+  platforms,
+  socket,
+};
 
 interface Options {
-  scripts: Script[];
-  broker: string;
+  plugins: {
+    [name: string]: MiddlewareConfig;
+  };
+  initialState?: GroupsState;
 }
 
-const create = (options: Options) => {
-  const mqtt = createMqtt({
-    broker: options.broker,
-    topics: [
-      'zigbee2mqtt/#',
-      'groups/#',
-    ],
+const create = async (options: Options): Promise<Store<GroupsState>> => {
+  const middlewares = Object.entries(options.plugins).map(async ([_, config]) => {
+    let pkgMiddleware: Middleware;
+    if (typeof config.pkg === 'string' && buildIn[config.pkg]) {
+      pkgMiddleware = buildIn[config.pkg];
+    } else if (typeof config.pkg === 'string') {
+      const pkg = require(config.pkg);
+      pkgMiddleware = pkg.default || pkg;
+    } else {
+      pkgMiddleware = config.pkg;
+    }
+    const instance = await pkgMiddleware(config.config);
+    return instance;
   });
-  const scripts = createScripts(options.scripts);
-  const socket = createSocket({});
 
   const store = createStore<GroupsState, any, any, any>(
     reducer(),
+    options.initialState,
     applyMiddleware(
-      mqtt,
-      scripts,
-      socket,
+      ...await Promise.all(middlewares),
     ),
   );
 
