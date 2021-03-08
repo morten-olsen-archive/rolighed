@@ -11,6 +11,6 @@
     "@morten-olsen/rolighed-common": "^1.0.0-alpha.11",
     "jsondiffpatch": "^0.4.1",
     "redux": "^4.0.5",
-    "ws": "^7.4.3"
+    "ws": "^7.4.4"
   }
 }
