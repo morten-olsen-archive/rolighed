@@ -1,6 +1,6 @@
 {
   "name": "@morten-olsen/rolighed-client",
-  "version": "1.0.0-alpha.16",
+  "version": "1.0.0-alpha.17",
   "main": "dist/index.js",
   "license": "MIT",
   "repository": {
@@ -8,7 +8,7 @@
     "url": "https://github.com/morten-olsen/rolighed"
   },
   "dependencies": {
-    "@morten-olsen/rolighed-common": "^1.0.0-alpha.16",
+    "@morten-olsen/rolighed-common": "^1.0.0-alpha.17",
     "isomorphic-ws": "^4.0.1",
     "jsondiffpatch": "^0.4.1",
     "socket.io-client": "^3.1.2",
