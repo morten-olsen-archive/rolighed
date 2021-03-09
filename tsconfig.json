@@ -20,5 +20,7 @@
     "path": "packages/cli"
   }, {
     "path": "packages/platform-zigbee2mqtt"
+  }, {
+    "path": "packages/plugin-homekit"
   }]
 }

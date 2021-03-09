@@ -11,6 +11,6 @@ export const setDeviceGroups = (payload: { [deviceName: string]: string[] }) => 
 });
 
 export const setAccessories = (payload: { [accessoryName: string]: AccessoryConfig }) => ({
-  type: '@@GROUPS/setDeviceGroups',
+  type: '@@GROUPS/setAccessories',
   payload,
 });
