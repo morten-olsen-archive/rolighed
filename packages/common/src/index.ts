@@ -10,6 +10,7 @@ import MiddlewareConfig from './types/MiddlewareConfig';
 import ScriptConfig from './types/ScriptConfig';
 import * as groupActions from './actions/groups';
 import AccessoryConfig from './types/AccessoryConfig';
+import * as actionNames from './constants/actionNames';
 
 type ScriptActions = ReturnType<typeof createScriptActions>
 
@@ -42,4 +43,5 @@ export {
   groupActions,
   AccessoryConfig,
   createDefaultState,
+  actionNames,
 };

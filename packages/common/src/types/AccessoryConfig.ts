@@ -1,5 +1,5 @@
 interface AccessoryConfig {
-  type: 'lightbulb',
+  type: string,
   bind: {
     [prop: string]: string;
   }

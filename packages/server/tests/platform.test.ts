@@ -50,8 +50,8 @@ describe('server/platform', () => {
   it('should be able to add a device', async () => {
     const { platform, store } = await setup();
     const api = platform.getApi();
-    await api.addDevice('foo', {}, { bar: 'baz' });
-    await api.addDevice('a', {}, { b: 10 });
+    await api.setDevice('foo', { bar: 'baz' }, {});
+    await api.setDevice('a', { b: 10 }, {});
     const devices = store.getState().devices;
     expect(Object.keys(devices)).toEqual(['foo', 'a']);
     expect(devices.foo).toEqual({
@@ -69,8 +69,8 @@ describe('server/platform', () => {
   it('should be able to remove a device', async () => {
     const { platform, store } = await setup();
     const api = platform.getApi();
-    await api.addDevice('foo', {}, { bar: 'baz' });
-    await api.addDevice('a', {}, { b: 10 });
+    await api.setDevice('foo', { bar: 'baz' }, {});
+    await api.setDevice('a', { b: 10 }, {});
     await api.removeDevice('foo');
     const devices = store.getState().devices;
     expect(Object.keys(devices)).toEqual(['a']);
@@ -84,14 +84,14 @@ describe('server/platform', () => {
   it('should be able to update a device', async () => {
     const { platform, store } = await setup();
     const api = platform.getApi();
-    await api.addDevice('foo', {}, { bar: 'baz' });
-    await api.addDevice('a', {}, { b: 10 });
-    await api.setDevice('foo', { baz: 'bar' }, { a: 'b' });
+    await api.setDevice('foo', { bar: 'baz' }, {});
+    await api.setDevice('a', { b: 10 }, {});
+    await api.setDevice('foo', { a: 'b' }, { baz: 'bar' });
     const devices = store.getState().devices;
     expect(Object.keys(devices)).toEqual(['foo', 'a']);
     expect(devices.foo).toEqual({
-      config: { a: 'b' },
-      state: { baz: 'bar' },
+      state: { a: 'b' },
+      config: { baz: 'bar' },
       controller: 'test',
     });
     expect(devices.a).toEqual({
@@ -109,7 +109,7 @@ describe('server/platform', () => {
       },
     });
     const api = platform.getApi();
-    await api.addDevice('Test Device 1', {}, { bar: 'baz' });
+    await api.setDevice('Test Device 1', { bar: 'baz' }, {});
     await Promise.resolve(store.dispatch(groupActions.setGroupSettings({
       upstairs: {
         on: true,

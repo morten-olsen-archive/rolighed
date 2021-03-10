@@ -1,4 +1,4 @@
-import { Middleware, Platform, PlatformConfig, PlatformApi, GroupsState } from '@morten-olsen/rolighed-common';
+import { actionNames, Middleware, Platform, PlatformConfig, PlatformApi, GroupsState } from '@morten-olsen/rolighed-common';
 
 interface Options {
   [name: string]: PlatformConfig;
@@ -6,26 +6,15 @@ interface Options {
 
 const createApi = (next: any, controller:string): PlatformApi => ({
   removeDevice: (name: string) => Promise.resolve(next({
-    type: '@@PLATFORM/removeDevice',
+    type: actionNames.PLATFORM.REMOVE_DEVICE,
     payload: name,
     meta: {
       name,
       controller,
     },
   })),
-  addDevice: (name: string, config: any = {}, state: any = {}) => Promise.resolve(next({
-    type: '@@PLATFORM/addDevice',
-    payload: {
-      state,
-      config,
-    },
-    meta: {
-      name,
-      controller,
-    },
-  })),
   setDevice: (name: string, state?: any, config?: any) => Promise.resolve(next({
-    type: '@@PLATFORM/setDevice',
+    type: actionNames.PLATFORM.SET_DEVICE,
     payload: {
       state,
       config,

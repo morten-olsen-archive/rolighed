@@ -1,5 +1,5 @@
 import { Reducer } from 'redux';
-import { GroupsState } from '@morten-olsen/rolighed-common';
+import { actionNames, GroupsState } from '@morten-olsen/rolighed-common';
 
 const createDefaultState = (): GroupsState => ({
   devices: {},
@@ -47,19 +47,7 @@ const createAccessoryStates = (state: GroupsState) => {
 
 const groups = (): Reducer<GroupsState> => (state = createDefaultState(), action) => {
   switch (action.type) {
-    case '@@PLATFORM/addDevice': {
-      return {
-        ...state,
-        devices: {
-          ...state.devices,
-          [action.meta.name]: {
-            ...action.payload,
-            controller: action.meta.controller,
-          },
-        },
-      };
-    };
-    case '@@PLATFORM/setDevice': {
+    case actionNames.PLATFORM.SET_DEVICE: {
       return {
         ...state,
         devices: {
@@ -72,7 +60,7 @@ const groups = (): Reducer<GroupsState> => (state = createDefaultState(), action
         },
       };
     };
-    case '@@PLATFORM/removeDevice': {
+    case actionNames.PLATFORM.REMOVE_DEVICE: {
       const newState = {
         ...state,
         devices: {
@@ -84,7 +72,7 @@ const groups = (): Reducer<GroupsState> => (state = createDefaultState(), action
 
       return newState;
     };
-    case '@@GROUPS/setGroupSettings': {
+    case actionNames.GROUPS.SET_GROUP_SETTINGS: {
       const newState = {
         ...state,
         groupSettings: {
@@ -98,7 +86,7 @@ const groups = (): Reducer<GroupsState> => (state = createDefaultState(), action
         accessoryStates: createAccessoryStates(newState),
       };
     }
-    case '@@GROUPS/setDeviceGroups': {
+    case actionNames.GROUPS.SET_DEVICE_GROUPS: {
       const newState = {
         ...state,
         deviceGroups: {
@@ -111,7 +99,7 @@ const groups = (): Reducer<GroupsState> => (state = createDefaultState(), action
         deviceStates: createDeviceStates(newState),
       };
     }
-    case '@@GROUPS/setAccessories': {
+    case actionNames.GROUPS.SET_ACCESSORIES: {
       const newState = {
         ...state,
         accessories: action.payload,
@@ -119,6 +107,28 @@ const groups = (): Reducer<GroupsState> => (state = createDefaultState(), action
       return {
         ...newState,
         accessoryStates: createAccessoryStates(newState),
+      };
+    }
+    case actionNames.GROUPS.UPDATE: {
+      const newState: GroupsState = {
+        ...state,
+        accessories: {
+          ...state.accessories,
+          ...(action.payload.accessories || {}),
+        },
+        deviceGroups: {
+          ...state.deviceGroups,
+          ...(action.payload.deviceGroups || {}),
+        },
+        groupSettings: {
+          ...state.groupSettings,
+          ...(action.payload.groupSettings || {}),
+        },
+      };
+      return {
+        ...newState,
+        accessoryStates: createAccessoryStates(newState),
+        deviceStates: createDeviceStates(newState),
       };
     }
     default: {
