@@ -1,6 +1,6 @@
 {
   "name": "@morten-olsen/rolighed-plugin-homekit",
-  "version": "1.0.0-alpha.17",
+  "version": "1.0.0-alpha.18",
   "main": "dist/src/index.js",
   "license": "MIT",
   "repository": {
@@ -8,7 +8,7 @@
     "url": "https://github.com/morten-olsen/rolighed"
   },
   "dependencies": {
-    "@morten-olsen/rolighed-common": "^1.0.0-alpha.17",
+    "@morten-olsen/rolighed-common": "^1.0.0-alpha.18",
     "hap-nodejs": "^0.9.2"
   }
 }
