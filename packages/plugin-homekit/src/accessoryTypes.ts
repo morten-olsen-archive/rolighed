@@ -25,8 +25,8 @@ const types: {[name: string]: AccessoryType} = {
         },
         brightness: {
           type: hap.Characteristic.Brightness,
-          from: input => input || 10,
-          to: input => Math.max(1, input as number),
+          from: input => (input || 10) / 2.55,
+          to: input => Math.max(1, input as number * 2.55),
         },
       }
     }],

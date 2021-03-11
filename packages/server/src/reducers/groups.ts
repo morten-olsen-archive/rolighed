@@ -77,7 +77,13 @@ const groups = (): Reducer<GroupsState> => (state = createDefaultState(), action
         ...state,
         groupSettings: {
           ...state.groupSettings,
-          ...action.payload,
+          ...Object.entries(action.payload).reduce((output, [name, values]: [string, any]) => ({
+            ...output,
+            [name]: {
+              ...(state.groupSettings[name] || {}),
+              ...values,
+            },
+          }), {}),
         },
       };
       return {

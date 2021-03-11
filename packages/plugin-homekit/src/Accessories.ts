@@ -27,11 +27,12 @@ class Accessories {
     type.services.forEach((serviceType) => {
       const service = new serviceType.type(name, hap.uuid.generate(name));
       Object.entries(serviceType.props).map(([prop, propDefinition]) => {
+        if (!definition.bind[prop]) return;
         const charactaristic = service.getCharacteristic(propDefinition.type);
-        const group = definition.bind[prop];
         charactaristic.on(hap.CharacteristicEventTypes.SET, (value, callback) => {
+          const definition = this._store.getState().accessories[name];
+          const group = definition.bind[prop];
           const rolighedValue = propDefinition.to(value);
-          console.log(name, prop, group, rolighedValue);
           this._store.dispatch(groupActions.setGroupSettings({
             [group]: {
               [prop]: rolighedValue,
@@ -63,10 +64,10 @@ class Accessories {
     type.services.forEach((serviceType) => {
       const service = accessory.getService(serviceType.type)!;
       Object.entries(serviceType.props).map(([prop, propDefinition]) => {
+        if (!definition.bind[prop]) return;
         if (next[prop] === previous[prop]) return;
         const homekitValue = propDefinition.from(next[prop]);
         service.setCharacteristic(propDefinition.type, homekitValue);
-        console.log('set', name, prop, homekitValue);
       });
     });
   }
@@ -74,7 +75,6 @@ class Accessories {
   public update = (next: GroupsState, previous: GroupsState) => {
     const previousAccessoryStates = previous.accessoryStates;
     const nextAccessoryStates = next.accessoryStates;
-    console.log('state', nextAccessoryStates);
     Object.entries(nextAccessoryStates).forEach(([name, next]) => {
       const previous = previousAccessoryStates[name];
       this._updateAccessory(name, next, previous);

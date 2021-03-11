@@ -4,8 +4,21 @@
   "main": "dist/index.js",
   "private": true,
   "license": "MIT",
+  "scripts": {
+    "bundle": "ncc build -o bundle src/index.ts"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/morten-olsen/rolighed"
+  },
+  "dependencies": {
+    "@morten-olsen/rolighed-common": "1.0.0-alpha.17",
+    "@morten-olsen/rolighed-platform-zigbee2mqtt": "1.0.0-alpha.17",
+    "@morten-olsen/rolighed-plugin-homekit": "1.0.0-alpha.17",
+    "@morten-olsen/rolighed-server": "1.0.0-alpha.17"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.27.0",
+    "typescript": "^4.2.3"
   }
 }

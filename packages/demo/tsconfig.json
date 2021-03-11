@@ -1,9 +1,11 @@
 {
-  "extends": "../../tsconfig.json",
-  "include": [
-    "./src"
-  ],
   "compilerOptions": {
-    "outDir": "./dist"
+    "target": "es2018",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   }
 }
