@@ -6,110 +6,95 @@ import createStore, {
 import { groupActions, Script, GroupsState, actionNames } from '@morten-olsen/rolighed-common';
 import zigbee2mqtt from '@morten-olsen/rolighed-platform-zigbee2mqtt';
 import homekit from '@morten-olsen/rolighed-plugin-homekit';
-
-const groupNames = {
-  livingroomLights: 'livingroom_lights',
-  libraryLights: 'library_lights',
-  libraryDoor: 'library_door',
-  upstairsLights: 'upstairs_lights',
-};
-
-const accessoryNames = {
-  tvroomLights: 'Living Room Lights',
-  libraryLights: 'Library Lights',
-  libraryDoor: 'Library Door',
-};
-
-const deviceNames = {
-  libraryLight1: 'Library Light 1 a',
-  tvroomLight1: 'Living Room Light',
-  doorSwitch: '0x5c0272fffe835bc2',
-};
+import * as home from './home';
 
 const doorOpenState: Partial<GroupsState> = {
   accessories: {
-    [accessoryNames.libraryLights]: {
+    [home.accessories.libraryLights]: {
       type: 'lightbulb',
       bind: {
-        state: groupNames.livingroomLights,
-        brightness: groupNames.upstairsLights,
+        state: home.groups.livingroomLights,
+        brightness: home.groups.upstairsLights,
       },
     },
-    [accessoryNames.tvroomLights]: {
+    [home.accessories.tvroomLights]: {
       type: 'lightbulb',
       bind: {
-        state: groupNames.livingroomLights,
-        brightness: groupNames.upstairsLights,
+        state: home.groups.livingroomLights,
+        brightness: home.groups.upstairsLights,
       },
     },
-    [accessoryNames.libraryDoor]: {
+    [home.accessories.libraryDoor]: {
       type: 'door',
       bind: {
-        open: groupNames.libraryDoor,
+        open: home.groups.libraryDoor,
       },
     },
   },
   deviceGroups: {
-    [deviceNames.tvroomLight1]: [groupNames.upstairsLights, groupNames.livingroomLights],
-    [deviceNames.libraryLight1]: [groupNames.upstairsLights, groupNames.livingroomLights],
+    [home.devices.tvroomLight1]: [home.groups.upstairsLights, home.groups.livingroomLights],
+    [home.devices.libraryLight1]: [home.groups.upstairsLights, home.groups.livingroomLights],
+    [home.devices.alrumLight1]: [home.groups.upstairsLights, home.groups.livingroomLights],
   },
 };
 
 const doorCloseState: Partial<GroupsState> = {
   accessories: {
-    [accessoryNames.libraryLights]: {
+    [home.accessories.libraryLights]: {
       type: 'lightbulb',
       bind: {
-        state: groupNames.libraryLights,
-        brightness: groupNames.libraryLights,
+        state: home.groups.libraryLights,
+        brightness: home.groups.libraryLights,
       },
     },
-    [accessoryNames.tvroomLights]: {
+    [home.accessories.tvroomLights]: {
       type: 'lightbulb',
       bind: {
-        state: groupNames.livingroomLights,
-        brightness: groupNames.upstairsLights,
+        state: home.groups.livingroomLights,
+        brightness: home.groups.upstairsLights,
       },
     },
-    [accessoryNames.libraryDoor]: {
+    [home.accessories.libraryDoor]: {
       type: 'door',
       bind: {
-        open: groupNames.libraryDoor,
+        open: home.groups.libraryDoor,
       },
     },
   },
   deviceGroups: {
-    [deviceNames.tvroomLight1]: [groupNames.livingroomLights, groupNames.upstairsLights],
-    [deviceNames.libraryLight1]: [groupNames.libraryLights],
+    [home.devices.tvroomLight1]: [home.groups.livingroomLights, home.groups.upstairsLights],
+    [home.devices.alrumLight1]: [home.groups.livingroomLights, home.groups.upstairsLights],
+    [home.devices.libraryLight1]: [home.groups.libraryLights],
   },
 };
 
 const doorOpenStateEvening: Partial<GroupsState> = {
   accessories: {
-    [accessoryNames.libraryLights]: {
+    [home.accessories.libraryLights]: {
       type: 'lightbulb',
       bind: {
-        state: groupNames.libraryLights,
-        brightness: groupNames.libraryLights,
+        state: home.groups.libraryLights,
+        brightness: home.groups.libraryLights,
       },
     },
-    [accessoryNames.tvroomLights]: {
+    [home.accessories.tvroomLights]: {
       type: 'lightbulb',
       bind: {
-        state: groupNames.libraryLights,
-        brightness: groupNames.libraryLights,
+        state: home.groups.libraryLights,
+        brightness: home.groups.libraryLights,
       },
     },
-    [accessoryNames.libraryDoor]: {
+    [home.accessories.libraryDoor]: {
       type: 'door',
       bind: {
-        open: groupNames.libraryDoor,
+        open: home.groups.libraryDoor,
       },
     },
   },
   deviceGroups: {
-    [deviceNames.tvroomLight1]: [groupNames.libraryLights],
-    [deviceNames.libraryLight1]: [groupNames.libraryLights],
+    [home.devices.tvroomLight1]: [home.groups.libraryLights],
+    [home.devices.libraryLight1]: [home.groups.libraryLights],
+    [home.devices.alrumLight1]: [home.groups.libraryLights],
   },
 };
 
@@ -121,13 +106,13 @@ const motionSensor: Script = (config, { dispatch }) => {
       if (occupancy) {
         clearTimeout(timer);
         dispatch(groupActions.setGroupSettings({
-          hallway: {
+          [config.group]: {
             state: 'ON',
           },
         }));
         timer = setTimeout(() => {
           dispatch(groupActions.setGroupSettings({
-            hallway: {
+            [config.group]: {
               state: 'OFF',
             },
           }));
@@ -169,6 +154,12 @@ const libraryDoor: Script = (config, { dispatch }) => {
   };
 };
 
+const log: Script = (config, { dispatch }) => {
+  return async (action) => {
+    console.log(action)
+  };
+};
+
 const config: Options = {
   plugins: {
     platforms: {
@@ -183,14 +174,18 @@ const config: Options = {
     scripts: {
       pkg: scripts,
       config: {
+        log: { pkg: log, config: {} },
         libraryDoor: { pkg: libraryDoor, config: {} },
-        doorButton: { pkg: doorButton, config: { device: deviceNames.doorSwitch } },
+        doorButton: { pkg: doorButton, config: { device: home.devices.doorSwitch } },
+        hallwayMotionSensor: { pkg: motionSensor, config: { device: home.devices.hallwayMotionSensor, group: home.groups.hallwayLights } },
+        kitchenMotionSensor: { pkg: motionSensor, config: { device: home.devices.kitchenMotionSensor, group: home.groups.kitchenLights } },
+        bathroomMotionSensor: { pkg: motionSensor, config: { device: home.devices.bathroomMotionSensor, group: home.groups.bathroomLights } },
       },
     },
     homekit: {
       pkg: homekit,
       config: {
-        username: '17:51:07:F4:AC:8A',
+        username: '17:51:07:F4:AC:4A',
         pincode: '678-90-875',
         port: 41802,
       },
@@ -199,11 +194,42 @@ const config: Options = {
 };
 
 const run = async () => {
+  console.log('starting');
   const store = await createStore(config);
+  let events = 0;
   store.subscribe(() => {
-    console.log('state', store.getState().deviceStates);
+    console.log(new Date().toString(), events++);
   });
+  await Promise.resolve(store.dispatch(groupActions.update({
+    accessories: {
+      [home.accessories.bedroomLights]: {
+        type: 'lightbulb',
+        bind: {
+          state: home.groups.bedroomLights,
+          brightness: home.groups.bedroomLights,
+        },
+      },
+      [home.accessories.staircaseLights]: {
+        type: 'lightbulb',
+        bind: {
+          state: home.groups.staircaseLights,
+          brightness: home.groups.staircaseLights,
+        },
+      }
+    },
+    deviceGroups: {
+      [home.devices.kitchenLight2]: [home.groups.upstairsLights, home.groups.kitchenLights],
+      [home.devices.kitchenLight3]: [home.groups.upstairsLights, home.groups.kitchenLights],
+      [home.devices.bathroomLight1]: [home.groups.upstairsLights, home.groups.bathroomLights],
+      [home.devices.bathroomLight2]: [home.groups.upstairsLights, home.groups.bathroomLights],
+      [home.devices.hallwayLight1]: [home.groups.upstairsLights, home.groups.hallwayLights],
+      [home.devices.staircaseLight1]: [home.groups.staircaseLights],
+      [home.devices.staircaseLight2]: [home.groups.staircaseLights],
+      [home.devices.bedroomLight1]: [home.groups.bedroomLights],
+    },
+  })));
   await Promise.resolve(store.dispatch(groupActions.update(doorOpenState)));
 };
 
 run().catch(console.error);
+
