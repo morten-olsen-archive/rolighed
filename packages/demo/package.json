@@ -1,6 +1,6 @@
 {
   "name": "@morten-olsen/rolighed-demo",
-  "version": "1.0.0-alpha.18",
+  "version": "1.0.0-alpha.19",
   "main": "dist/index.js",
   "private": true,
   "license": "MIT",
@@ -12,10 +12,10 @@
     "url": "https://github.com/morten-olsen/rolighed"
   },
   "dependencies": {
-    "@morten-olsen/rolighed-common": "^1.0.0-alpha.18",
-    "@morten-olsen/rolighed-platform-zigbee2mqtt": "^1.0.0-alpha.18",
-    "@morten-olsen/rolighed-plugin-homekit": "^1.0.0-alpha.18",
-    "@morten-olsen/rolighed-server": "^1.0.0-alpha.18"
+    "@morten-olsen/rolighed-common": "^1.0.0-alpha.19",
+    "@morten-olsen/rolighed-platform-zigbee2mqtt": "^1.0.0-alpha.19",
+    "@morten-olsen/rolighed-plugin-homekit": "^1.0.0-alpha.19",
+    "@morten-olsen/rolighed-server": "^1.0.0-alpha.19"
   },
   "devDependencies": {
     "@vercel/ncc": "^0.27.0",
